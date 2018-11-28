@@ -1,24 +1,29 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../components/text_card.dart';
 import '../components/padded_text_field.dart';
 import '../components/padded_text.dart';
+import 'package:dmp_flutter/navigation/routes.dart';
 
 
 class Login extends StatelessWidget {
   String title;
+
+  BuildContext context;
 
   Login({String title}) {
     this.title = title;
   }
 
   void onLoginPressed() {
-    print('Pressed!');
+    Routes.router.navigateTo(context, "/customer/home", transition: TransitionType.fadeIn);
   }
 
   @override
   Widget build(BuildContext context) {
+    this.context=context;
     return Scaffold(
       body: Stack(
         children: <Widget>[
