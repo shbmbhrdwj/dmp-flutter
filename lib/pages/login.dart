@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dmp_flutter/navigation/routes.dart';
-import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dmp_flutter/config/ApiClient.dart';
 import 'package:dmp_flutter/utils/validator.dart';
@@ -26,7 +25,8 @@ class Login extends StatelessWidget {
         Container(
           decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: AssetImage('assets/graphics/loginBg.jpeg'), fit: BoxFit.cover)),
+                  image: AssetImage('assets/graphics/loginBg.jpeg'),
+                  fit: BoxFit.cover)),
         ),
         LoginForm()
       ],
@@ -65,10 +65,8 @@ class _LoginFormState extends State<LoginForm> {
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("authToken", body["data"]["token"]);
-         String token = prefs.getString("authToken");
-         print(token);
-        // Routes.router.navigateTo(context, "/customer/home",
-        //     transition: TransitionType.fadeIn, replace: true, clearStack: true);
+        Routes.router.navigateTo(context, Routes.customerHome,
+            replace: true, clearStack: true);
       }
     }
   }
