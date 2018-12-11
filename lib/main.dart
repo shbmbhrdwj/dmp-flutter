@@ -1,27 +1,29 @@
+import 'package:dmp_flutter/config/ApiClient.dart';
 import 'package:dmp_flutter/navigation/routes.dart';
+import 'package:dmp_flutter/pages/splash.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './pages/login.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
   }
-
 }
 
-class _MyAppState extends State<MyApp>{
+class _MyAppState extends State<MyApp> {
+  
 
-  _MyAppState(){
-
+  @override
+  void initState() {
     Routes.init();
-
+    super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class _MyAppState extends State<MyApp>{
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: Splash(),
     );
   }
 }
