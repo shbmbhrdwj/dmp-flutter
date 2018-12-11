@@ -11,11 +11,9 @@ import '../components/padded_text_field.dart';
 import '../components/padded_text.dart';
 
 class Login extends StatelessWidget {
-  String title;
+  final String title;
 
-  Login({String title}) {
-    this.title = title;
-  }
+  Login({this.title});
 
   @override
   Widget build(BuildContext context) {
