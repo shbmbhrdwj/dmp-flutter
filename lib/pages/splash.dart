@@ -17,8 +17,7 @@ class Splash extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assets/graphics/flutter-icon.svg",
-                color: Colors.lightBlue),
+            SvgPicture.asset("assets/graphics/flutter-icon.svg"),
           ],
         ),
       ),
