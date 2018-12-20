@@ -30,7 +30,6 @@ class Validator {
   }
 
   runRules() {
-    print(list);
     for (var rule in list) {
       if (rule != null) return rule;
     }

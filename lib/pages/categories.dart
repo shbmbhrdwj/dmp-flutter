@@ -35,7 +35,7 @@ class _CategoriesState extends State<Categories> {
   }
 
   void onItemClicked() {
-    print("Hello");
+    ///TODO Show Service Form
   }
 
   Widget getListViewItem(BuildContext context, int index) {

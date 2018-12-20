@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dmp_flutter/navigation/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dmp_flutter/config/ApiClient.dart';
+import 'package:dmp_flutter/config/api_client.dart';
 import 'package:dmp_flutter/utils/validator.dart';
 import 'package:flutter/material.dart';
 
