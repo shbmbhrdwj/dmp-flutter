@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/components/padded_text.dart';
 import 'package:dmp_flutter/models/category.dart';
 import 'package:dmp_flutter/services/category.dart';
@@ -17,7 +18,7 @@ class _CategoriesState extends State<Categories> {
     getCategories();
   }
 
-  List<Category> categories = List();
+  BuiltList<Category> categories = new BuiltList<Category>();
 
   @override
   Widget build(BuildContext context) {

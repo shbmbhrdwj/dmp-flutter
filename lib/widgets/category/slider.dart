@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/models/category.dart';
 import 'package:dmp_flutter/services/category.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class CategoriesSlider extends StatefulWidget {
 }
 
 class _CategoriesSliderState extends State<CategoriesSlider> {
-  List<Category> categories = List();
+  BuiltList<Category> categories = new BuiltList<Category>();
   static const double CARD_SIZE = 120;
   @override
   void initState() {

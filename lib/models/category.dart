@@ -13,10 +13,9 @@ abstract class Category implements Built<Category, CategoryBuilder> {
 
   factory Category([updates(CategoryBuilder b)]) = _$Category;
 
-  @BuiltValueField(wireName: 'id')
   int get id;
-  @BuiltValueField(wireName: 'name')
   String get name;
+
   String toJson() {
     return json.encode(serializers.serializeWith(Category.serializer, this));
   }
