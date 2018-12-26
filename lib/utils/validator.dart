@@ -7,7 +7,7 @@ class Validator {
       Rules.MIN_LENTH: (String value, Map<String, dynamic> property) {
         var minLength = property["minLength"];
         if (value.length < minLength)
-          return "${entityName} should be more than ${minLength} characters";
+          return "$entityName should be more than $minLength characters";
         return null;
       },
       Rules.EMAIL: _validateEmail
@@ -30,7 +30,6 @@ class Validator {
   }
 
   runRules() {
-    print(list);
     for (var rule in list) {
       if (rule != null) return rule;
     }

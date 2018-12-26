@@ -1,10 +1,6 @@
-import 'package:dmp_flutter/config/ApiClient.dart';
 import 'package:dmp_flutter/navigation/routes.dart';
 import 'package:dmp_flutter/pages/splash.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import './pages/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,22 +12,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
-
   @override
   void initState() {
     Routes.init();
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'DMP',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.lightBlue,
+          fontFamily: "Poppins",
+          primaryColorBrightness: Brightness.dark,
+          primaryTextTheme: TextTheme(
+            title: TextStyle(color: Colors.white),
+            subhead: TextStyle(fontWeight: FontWeight.w700, fontSize: 18,color: Colors.black87)
+          )),
       home: Splash(),
     );
   }

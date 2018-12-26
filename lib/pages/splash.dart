@@ -1,9 +1,7 @@
-import 'package:dmp_flutter/config/ApiClient.dart';
 import 'package:dmp_flutter/navigation/routes.dart';
 import 'package:dmp_flutter/utils/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatelessWidget {
   @override
@@ -17,8 +15,7 @@ class Splash extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assets/graphics/flutter-icon.svg",
-                color: Colors.lightBlue),
+            SvgPicture.asset("assets/graphics/flutter-icon.svg"),
           ],
         ),
       ),

@@ -1,73 +1,59 @@
-import 'dart:convert';
-
-import 'package:dmp_flutter/components/category_list_item.dart';
+import 'package:dmp_flutter/components/flat_button_with_right_icon.dart';
 import 'package:dmp_flutter/components/padded_text.dart';
-import 'package:dmp_flutter/models/category.dart';
+import 'package:dmp_flutter/components/search_app_bar.dart';
+import 'package:dmp_flutter/navigation/routes.dart';
+import 'package:dmp_flutter/widgets/category/slider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+const double SCREEN_EDGE_MARGIN = 32;
 
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  _HomeState() {
-    getCategories();
-  }
-
-  List<Category> categories = List();
-
-  Future<List<Category>> getCategories() async {
-    var url = "http://dmp.faimtech.in/api/categories";
-    final response = await http.get(url);
-    print("Response status: ${response.statusCode}");
-    print("Response body: ${response.body}");
-    if (response.statusCode >= 200 && response.statusCode < 400) {
-      var responseJson = json.decode(response.body);
-      var categories = (responseJson['data'] as List)
-          .map((categoryJson) => Category.fromJson(categoryJson))
-          .toList();
-
-      setState(() {
-        this.categories = categories;
-      });
-
-      return categories;
-    }
-
-    return List();
-  }
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
+      appBar: SearchAppBar.build(context, "Home", onSearchPressed),
       body: Container(
-          color: Color.fromARGB(255, 240, 238, 244),
-          child: ListView.builder(
-            itemBuilder: getListViewItem,
-            itemCount: categories.length,
-          )),
+          child: ListView(
+        children: <Widget>[
+          getSectionHeader(context, "Categories", () {
+            Routes.router.navigateTo(context, Routes.categories);
+          }),
+          CategoriesSlider(),
+          getSectionHeader(context, "Tasks", () {}),
+        ],
+      )),
     );
   }
 
-  void onItemClicked() {
-    print("Hello");
+  Widget getSectionHeader(
+      BuildContext context, String title, Function onPressed) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: getSubhead(context, title),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 32, 16, 16),
+          child: FlatButtonWithRightIcon(
+            text: "View All",
+            icon: FontAwesomeIcons.chevronRight,
+            onPressed: onPressed,
+          ),
+        )
+      ],
+    );
   }
 
-  Widget getListViewItem(BuildContext context, int index) {
-    if (index == 0) {
-      var paddedText =
-          PaddedText(text: "Categories", padding: EdgeInsets.all(16.0));
-      paddedText.style = TextStyle(
-          color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16.0);
-      return paddedText;
-    }
-    return CategoryListItem(category: categories[index - 1]);
+  PaddedText getSubhead(BuildContext context, String title) {
+    return PaddedText(
+        padding:
+            EdgeInsets.fromLTRB(SCREEN_EDGE_MARGIN, SCREEN_EDGE_MARGIN, 0, 16),
+        text: title,
+        style: Theme.of(context).primaryTextTheme.subhead);
+  }
+
+  void onSearchPressed(String query) {
+    //TODO: Handle search query
   }
 }
