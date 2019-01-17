@@ -1,8 +1,9 @@
-import 'dart:convert';
-
+import 'package:dmp_flutter/actions/action.dart';
 import 'package:dmp_flutter/navigation/routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dmp_flutter/config/api_client.dart';
+import 'package:dmp_flutter/states/app_state.dart';
+import 'package:dmp_flutter/states/loading_state.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:dmp_flutter/utils/validator.dart';
 import 'package:flutter/material.dart';
 
@@ -41,45 +42,50 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   Map<String, String> _formData = {"email": null, "password": null};
-  var _showForm = true;
-
-  void onLoginPressed() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-
-      setState(() {
-        _showForm = false;
-      });
-      var response = await ApiClient.postTo("/login", _formData);
-
-      Map<String, dynamic> body = json.decode(response.body);
-
-      if (body["status"] < 0) {
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text(body["message"])));
-        setState(() {
-          _showForm = true;
-        });
-      } else {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString("authToken", body["data"]["token"]);
-        Routes.router.navigateTo(context, Routes.customerHome,
-            replace: true, clearStack: true);
-      }
-    }
-  }
+  Store<AppState> store;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(32.0),
-        child: Center(
-            child: _showForm ? buildLoginForm() : CircularProgressIndicator()));
+    return StoreConnector<AppState, Map<String, dynamic>>(
+      converter: (store) {
+        return {
+          "loadingState": store.state.loginState.loadingState,
+          "error": store.state.loginState.error,
+          "callback": () {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              store.dispatch(startLoginAction(_formData));
+            }
+          }
+        };
+      },
+      onWillChange: (viewModel) {
+        if (viewModel['loadingState'] == LoadingState.SUCCESS) {
+          Routes.router.navigateTo(context, Routes.customerHome,
+              replace: true, clearStack: true);
+        }
+      },
+      onDidChange: (viewModel) {
+        if (viewModel['loadingState'] == LoadingState.ERROR) {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(viewModel['error']),
+          ));
+        }
+      },
+      builder: (context, viewModel) {
+        return Container(
+            padding: const EdgeInsets.all(32.0),
+            child: Center(
+                child: viewModel['loadingState'] == LoadingState.LOADING
+                    ? CircularProgressIndicator()
+                    : buildLoginForm(viewModel['callback'])));
+      },
+    );
   }
 
-  Column buildLoginForm() {
+  Column buildLoginForm(callback) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -138,7 +144,7 @@ class _LoginFormState extends State<LoginForm> {
         ButtonBar(
           children: <Widget>[
             RaisedButton(
-                onPressed: this.onLoginPressed,
+                onPressed: callback,
                 color: Colors.blue,
                 elevation: 16,
                 shape: new RoundedRectangleBorder(

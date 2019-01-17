@@ -24,6 +24,8 @@ dependencies:
   font_awesome_flutter: ^8.2.0
   fluro: ^1.3.7
   shared_preferences: ^0.4.3
+  redux: ^3.0.0
+  flutter_redux: ^0.5.3
 
 
 dev_dependencies:

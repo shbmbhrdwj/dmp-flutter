@@ -2,7 +2,7 @@ import 'package:dmp_flutter/utils/auth.dart';
 import 'package:http/http.dart';
 
 class ApiClient {
-  static String baseUrl = "http://dmp.faimtech.in/api";
+  static String baseUrl = "https://dmp.faimtech.in/api";
 
   static Map<String, String> _getHeader() {
     return {

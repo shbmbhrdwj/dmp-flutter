@@ -1,0 +1,1 @@
+enum LoadingState { UNKNOWN, LOADING, SUCCESS, ERROR }

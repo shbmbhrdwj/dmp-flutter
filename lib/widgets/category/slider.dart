@@ -1,43 +1,33 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/models/category.dart';
-import 'package:dmp_flutter/services/category.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CategoriesSlider extends StatefulWidget {
-  _CategoriesSliderState createState() => _CategoriesSliderState();
-}
-
-class _CategoriesSliderState extends State<CategoriesSlider> {
-  BuiltList<Category> categories = new BuiltList<Category>();
+class CategoriesSlider extends StatelessWidget {
+  final BuiltList<Category> categories;
   static const double CARD_SIZE = 120;
-  @override
-  void initState() {
-    super.initState();
-    getCategories();
-  }
+
+  CategoriesSlider({@required this.categories});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: CARD_SIZE,
-        child: ListView.builder(
-          itemBuilder: listItemBuilder,
-          itemCount: categories.length + 1,
-          scrollDirection: Axis.horizontal,
-        ));
-  }
-
-  void getCategories() async {
-    var categoriesList = await CategoryService.getAll();
-    setState(() {
-      this.categories = categoriesList;
-    });
+    Widget widgetToRender;
+    if (categories == null || categories.length == 0) {
+      widgetToRender = Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      widgetToRender = ListView.builder(
+        itemBuilder: listItemBuilder,
+        itemCount: categories.length + 1,
+        scrollDirection: Axis.horizontal,
+      );
+    }
+    return Container(height: CARD_SIZE, child: widgetToRender);
   }
 
   Widget listItemBuilder(BuildContext context, int index) {
-    if (index == 0)
-      return Container(width: 32, height: CARD_SIZE);
+    if (index == 0) return Container(width: 32, height: CARD_SIZE);
     return Padding(
       padding: const EdgeInsets.only(right: 16),
       child: Container(
