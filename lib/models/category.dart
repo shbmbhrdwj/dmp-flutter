@@ -15,6 +15,9 @@ abstract class Category implements Built<Category, CategoryBuilder> {
 
   int get id;
   String get name;
+  String get icon;
+  @BuiltValueField(wireName: 'icon_style')
+  String get iconStyle;
 
   String toJson() {
     return json.encode(serializers.serializeWith(Category.serializer, this));

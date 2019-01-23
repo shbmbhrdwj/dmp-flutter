@@ -1,6 +1,6 @@
 import 'package:dmp_flutter/models/category.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:dmp_flutter/utils/icons.dart';
 
 class CategoryListItem extends StatelessWidget {
   final Category category;
@@ -20,8 +20,9 @@ class CategoryListItem extends StatelessWidget {
                   title: Text(category.name),
                   subtitle: Text("All your plumbing needs"),
                   leading: Icon(
-                    FontAwesomeIcons.broom,
-                    color: Colors.blue,
+                    getIconData(category.icon, category.iconStyle),
+                    color:
+                        Color(getHexForIconCode(category.icon)).withAlpha(255),
                     size: 32.0,
                   ),
                 ),

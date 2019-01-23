@@ -4,14 +4,18 @@ import 'package:dmp_flutter/config/api_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
-  static String token;
+  static String _token;
 
-  static init() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = prefs.getString("authToken");
+  static Future<String> getToken() async {
+    if (_token == null || _token.isEmpty) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString("authToken");
+    }
+    return _token;
   }
 
   static Future<bool> validToken() async {
+    String token = await getToken();
     if (token == null || token.isEmpty)
       return Future<bool>.delayed(Duration(milliseconds: 250), () => false);
 
@@ -20,9 +24,7 @@ class Auth {
     Map<String, dynamic> body = json.decode(response.body);
     if (body["status"] == null)
       return false;
-    else if (body["status"] < 0)
-      return false;
-
+    else if (body["status"] < 0) return false;
 
     return true;
   }

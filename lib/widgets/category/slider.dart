@@ -1,13 +1,15 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/models/category.dart';
+import 'package:dmp_flutter/utils/icons.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoriesSlider extends StatelessWidget {
   final BuiltList<Category> categories;
   static const double CARD_SIZE = 120;
 
-  CategoriesSlider({@required this.categories});
+  final void Function(Category category) onItemClicked;
+
+  CategoriesSlider({@required this.categories, this.onItemClicked});
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +30,36 @@ class CategoriesSlider extends StatelessWidget {
 
   Widget listItemBuilder(BuildContext context, int index) {
     if (index == 0) return Container(width: 32, height: CARD_SIZE);
+    Category category = categories[index - 1];
+    Color categoryColor =
+        Color(getHexForIconCode(category.icon)).withAlpha(255);
+    IconData iconData = getIconData(category.icon, category.iconStyle);
+    List<Color> colors = [
+      Color.fromARGB(60, 0, 0, 0),
+      Color.fromARGB(150, 0, 0, 0)
+    ];
     return Padding(
       padding: const EdgeInsets.only(right: 16),
       child: Container(
         width: CARD_SIZE,
         height: CARD_SIZE,
         child: Card(
-          color: Colors.red[300],
+          color: categoryColor,
           elevation: 8,
-          child: IconButton(
-            icon: Icon(
-              FontAwesomeIcons.broom,
-              size: 48,
-              color: Colors.white,
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: colors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight)),
+            child: IconButton(
+              icon: Icon(
+                iconData,
+                size: 48,
+                color: Colors.white,
+              ),
+              onPressed: () => onItemClicked(category),
             ),
-            onPressed: () {},
           ),
         ),
       ),

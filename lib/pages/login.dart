@@ -3,7 +3,6 @@ import 'package:dmp_flutter/navigation/routes.dart';
 import 'package:dmp_flutter/states/app_state.dart';
 import 'package:dmp_flutter/states/loading_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:dmp_flutter/utils/validator.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +41,6 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   Map<String, String> _formData = {"email": null, "password": null};
-  Store<AppState> store;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -53,6 +51,8 @@ class _LoginFormState extends State<LoginForm> {
         return {
           "loadingState": store.state.loginState.loadingState,
           "error": store.state.loginState.error,
+          "setToken": () => store.dispatch(
+              saveToPrefs('authToken', store.state.loginState.authToken)),
           "callback": () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -63,6 +63,7 @@ class _LoginFormState extends State<LoginForm> {
       },
       onWillChange: (viewModel) {
         if (viewModel['loadingState'] == LoadingState.SUCCESS) {
+          viewModel['setToken']();
           Routes.router.navigateTo(context, Routes.customerHome,
               replace: true, clearStack: true);
         }

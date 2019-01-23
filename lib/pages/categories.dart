@@ -1,45 +1,38 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/components/padded_text.dart';
 import 'package:dmp_flutter/models/category.dart';
-import 'package:dmp_flutter/services/category.dart';
+import 'package:dmp_flutter/actions/action.dart';
+import 'package:dmp_flutter/states/app_state.dart';
+import 'package:dmp_flutter/states/category_state.dart';
 import 'package:dmp_flutter/widgets/category/list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-class Categories extends StatefulWidget {
-  const Categories({Key key}) : super(key: key);
-
-  @override
-  _CategoriesState createState() => _CategoriesState();
-}
-
-class _CategoriesState extends State<Categories> {
-  void initState() {
-    super.initState();
-    getCategories();
-  }
-
-  BuiltList<Category> categories = new BuiltList<Category>();
-
+class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
-      body: Container(
-          color: Color.fromARGB(255, 240, 238, 244),
-          child: ListView.builder(
-            itemBuilder: getListViewItem,
-            itemCount: categories.length,
-          )),
+    return StoreConnector<AppState, CategoryState>(
+      onInit: (store) => store.dispatch(fetchCategories),
+      converter: (store) => store.state.categoryState,
+      builder: (context, viewModel) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Home"),
+          ),
+          body: Container(
+              color: Color.fromARGB(255, 240, 238, 244),
+              child: ListView.builder(
+                itemBuilder: (context, index) =>
+                    getListViewItem(context, index, viewModel.categoryList),
+                itemCount: viewModel.categoryList.length + 1,
+              )),
+        );
+      },
     );
   }
 
-  void onItemClicked() {
-    ///TODO Show Service Form
-  }
-
-  Widget getListViewItem(BuildContext context, int index) {
+  Widget getListViewItem(
+      BuildContext context, int index, BuiltList<Category> categories) {
     if (index == 0) {
       return PaddedText(
           text: "Categories",
@@ -50,12 +43,5 @@ class _CategoriesState extends State<Categories> {
               fontSize: 16.0));
     }
     return CategoryListItem(category: categories[index - 1]);
-  }
-
-  void getCategories() async {
-    var categoriesList = await CategoryService.getAll();
-    setState(() {
-      this.categories = categoriesList;
-    });
   }
 }

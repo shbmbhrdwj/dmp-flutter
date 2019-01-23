@@ -1,18 +1,26 @@
 import 'package:dmp_flutter/navigation/routes.dart';
-import 'package:dmp_flutter/pages/login.dart';
 import 'package:dmp_flutter/reducers/reducer.dart';
 import 'package:dmp_flutter/states/app_state.dart';
+import 'package:dmp_flutter/utils/auth.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:dmp_flutter/middlewares/thunk.dart';
 import 'package:dmp_flutter/middlewares/future.dart';
+import 'package:redux_logging/redux_logging.dart';
 
-void main() {
-  Routes.init();
+void main() async {
+  bool isAuthenticated = await Auth.validToken();
+  Routes.init(isAuthenticated);
   Store<AppState> store = Store<AppState>(PrimaryReducer.reduce,
       initialState: AppState.initialState(),
-      middleware: [thunkMiddleware, futureMiddleware]);
+      middleware: [
+        thunkMiddleware,
+        futureMiddleware,
+        LoggingMiddleware.printer(
+            formatter: LoggingMiddleware.multiLineFormatter)
+      ]);
+
   runApp(MyApp(store));
 }
 
@@ -37,7 +45,9 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                     color: Colors.black87))),
-        home: Login(),
+        home: Builder(builder: (BuildContext context) {
+          return Routes.getRootWidget();
+        }),
       ),
     );
   }

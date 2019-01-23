@@ -1,11 +1,15 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dmp_flutter/actions/action.dart';
 import 'package:dmp_flutter/models/category.dart';
-import 'package:dmp_flutter/states/customer_home_state.dart';
+import 'package:dmp_flutter/reducers/provider_list_reducer.dart';
+import 'package:dmp_flutter/states/category_state.dart';
 import 'package:dmp_flutter/states/loading_state.dart';
+import 'package:dmp_flutter/states/provider_list_state.dart';
 
-class CustomerHomeReducer {
-  static CustomerHomeState reduce(CustomerHomeState prevState, action) {
+class CategoryReducer {
+  static CategoryState reduce(CategoryState prevState, action) {
+    ProviderListState providerListState =
+        ProviderListReducer.reduce(prevState.providerListState, action);
     if (action is CategoriesPendingAction) {
       return prevState
           .rebuild((state) => state..loadingState = LoadingState.LOADING);
@@ -22,6 +26,7 @@ class CustomerHomeReducer {
         ..error = error
         ..loadingState = LoadingState.ERROR);
     }
-    return prevState;
+    return prevState.rebuild((builder) =>
+        builder..providerListState = providerListState.toBuilder());
   }
 }

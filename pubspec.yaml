@@ -26,6 +26,7 @@ dependencies:
   shared_preferences: ^0.4.3
   redux: ^3.0.0
   flutter_redux: ^0.5.3
+  redux_logging: ^0.3.0
 
 
 dev_dependencies:
@@ -35,6 +36,22 @@ dev_dependencies:
   source_gen: ^0.9.3
   build_runner: ^1.1.2
   built_value_generator: ^6.2.0
+
+
+analyzer:
+  strong-mode:
+    implicit-dynamic: false
+  errors:
+    # treat missing required parameters as a warning (not a hint)
+    always_declare_return_types: warning
+    always_specify_types: warning
+
+linter:
+  rules:
+    - always_declare_return_types
+    - always_put_control_body_on_new_line
+    - always_put_required_named_parameters_first
+    - always_specify_types
 
 
 # For information on the generic Dart part of this file, see the

@@ -1,10 +1,10 @@
 import 'package:redux/redux.dart';
 
 thunkMiddleware<State>(Store<State> store, action, NextDispatcher next) {
-  if (action is CheckThunkAction<State>) {
+  if (action is ThunkAction<State>) {
     action(store);
   } else
     next(action);
 }
 
-typedef void CheckThunkAction<State>(Store<State> store);
+typedef void ThunkAction<State>(Store<State> store);
